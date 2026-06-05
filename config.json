@@ -1,0 +1,21 @@
+{
+  "gemini_api_key": "QVEuQWI4Uk42SnRIdVprUms3RG8xVGl3aURmLXdETENJYzZhb1E3Ym83ODRzNXMwSW4yM1E=",
+  "model_name": "gemini-3.5-flash",
+  "last_preset": "Custom Manual",
+  "last_creation_mode": "Rewrite / Translate Lyrics from YouTube",
+  "last_output_mode": "Full Song",
+  "last_genre": "Deep House",
+  "last_target": "Europe",
+  "last_vocal": "Female Vocal",
+  "last_source_language": "Auto Detect from YouTube",
+  "last_target_language": "English",
+  "last_market_language": "English (US)",
+  "last_bass": "Extreme Subwoofer Bass",
+  "last_mood": "Festival Energy",
+  "last_bpm": "130",
+  "last_extra": "",
+  "last_batch_count": 10,
+  "last_batch_strategy": "Random Creative Variations",
+  "last_advisor_mode": "Autopilot (Auto-Audit + Auto-Optimize 90+)",
+  "license_key": ""
+}
