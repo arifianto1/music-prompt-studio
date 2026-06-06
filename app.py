@@ -1,4 +1,4 @@
-import streamlit as st
+﻿import streamlit as st
 import google.generativeai as genai
 from youtube_transcript_api import YouTubeTranscriptApi
 import sqlite3
