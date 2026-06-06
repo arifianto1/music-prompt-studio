@@ -16,18 +16,18 @@ except Exception:
     YouTubeTranscriptApi = None
 
 # ============================================================
-# MUSIC PROMPT STUDIO PRO v4.5.0 - ULTIMATE MERGE EDITION
+# MUSIC PROMPT STUDIO PRO v4.5.1 - UNIFIED ENGINE
 # Features:
 # - V2.5.4 Full Feature Set (Advisor, Optimizer, Genre Rules)
 # - V4 Stable Markdown Generation Engine (Anti-503 Error)
 # - SQLite Database for History & Custom Presets
 # - Mobile Responsiveness CSS
-# - [NEW] Fusion Genre, Slider Persentase, Auto Pilot 90+
-# - [NEW] Mode Kompilasi & Rotasi Vokal Dinamis
+# - Fusion Genre, Auto Pilot 90+, Mode Kompilasi & Rotasi Vokal
+# - [FIX] Unified Batch & Tracklist Engine (No Redundant Inputs)
 # ============================================================
 
 st.set_page_config(
-    page_title="Music Prompt Studio Pro v4.5.0",
+    page_title="Music Prompt Studio Pro v4.5.1",
     page_icon="🎵",
     layout="wide"
 )
@@ -272,8 +272,8 @@ def fetch_youtube_transcript(video_id, preferred_languages=None):
 # -----------------------------
 # APP HEADER & OPTIONS
 # -----------------------------
-st.title("Music Prompt Studio Pro v4.5.0 💎")
-st.write("AI music prompt generator with Stable Markdown Engine & SQLite DB. Integrated with V2.5.4 Advisors and Optimizers.")
+st.title("Music Prompt Studio Pro v4.5.1 💎")
+st.write("AI music prompt generator with Stable Markdown Engine & SQLite DB. Integrated with Unified Fusion & Batch Engine.")
 
 st.divider()
 
@@ -368,31 +368,35 @@ with col2:
     mood = st.selectbox("Mood / Energy", moods, index=index_or_default(moods, default_mood))
     bpm = st.text_input("BPM", default_bpm)
 
-# --- [NEW] MODE PRODUKSI & TAKARAN ENGINE ---
+# --- [FIXED] MODE PRODUKSI & BATCH ENGINE GABUNGAN ---
 st.divider()
 st.subheader("🎛️ Produksi Lanjut & Takaran (Fusion Engine)")
+
+# Baris 1: Mode & Genre
 adv_col1, adv_col2 = st.columns(2)
 with adv_col1:
     produksi_mode = st.selectbox("Mode Produksi Output", produksi_modes, index=index_or_default(produksi_modes, config.get("last_produksi_mode", "Single Track (1 Lagu)")))
-    if produksi_mode == "Kompilasi (Long Duration)":
-        jumlah_track = st.slider("Jumlah Variasi Lagu (Tracklist)", min_value=2, max_value=10, value=config.get("last_jumlah_track", 5))
-    else:
-        jumlah_track = 1
     genre_kombinasi = st.selectbox("Gabungkan Genre Utama Dengan (Opsional)", genre_kombinasi_options, index=index_or_default(genre_kombinasi_options, config.get("last_genre_kombinasi", "Tidak Ada")))
 
+# Baris 2: Takaran & Auto Pilot
 with adv_col2:
     bobot_referensi = st.slider("Pengaruh Referensi YouTube (%)", min_value=0, max_value=100, value=config.get("last_bobot_referensi", 60), step=10)
-    bobot_genre = 100 - bobot_referensi
-    st.caption(f"Sisa Bobot Genre Utama & Kombinasi: {bobot_genre}%")
+    st.caption(f"Sisa Bobot Genre Utama & Kombinasi: {100 - bobot_referensi}%")
     auto_pilot_90 = st.checkbox("🚀 Auto Pilot 90+ (Override Mode Kreativitas Dewa)", value=config.get("last_auto_pilot", True))
 
 st.divider()
 
-st.subheader("Batch Generate Engine")
+# Baris 3: Unified Batch Engine
+st.subheader("Batch Generate & Variasi")
 batch_col1, batch_col2 = st.columns(2)
 with batch_col1:
-    batch_count = st.selectbox("Number of Variations", batch_counts, index=index_or_default(batch_counts, config.get("last_batch_count", 1)))
-    st.caption("(Jika Mode Kompilasi dipilih, Batch ini akan membuat beberapa set kompilasi berbeda)")
+    batch_count = st.selectbox("Jumlah Output / Track", batch_counts, index=index_or_default(batch_counts, config.get("last_batch_count", 1)))
+    # Dinamika UI: Beri petunjuk yang jelas kepada user apa fungsi angka tersebut
+    if produksi_mode == "Kompilasi (Long Duration)":
+        st.info(f"💡 Anda di Mode Kompilasi: Output berupa 1 Blueprint Album berisi **{batch_count} lagu** yang mengalir.")
+    else:
+        st.info(f"💡 Anda di Mode Single: Output berupa **{batch_count} variasi lagu** yang berdiri sendiri.")
+
 with batch_col2:
     batch_strategy = st.selectbox("Batch Strategy", batch_strategies, index=index_or_default(batch_strategies, config.get("last_batch_strategy", "Single Best Output")))
 
@@ -441,7 +445,7 @@ manual_lyrics = st.text_area("Optional: Paste Lyrics / Transcript Manual", heigh
 # SAVE & PRESET MANAGER
 # -----------------------------
 if st.button("Save Current Settings", use_container_width=True):
-    config.update({"gemini_api_key": api_key, "model_name": model_name, "last_preset": preset_name, "last_creation_mode": creation_mode, "last_output_mode": output_mode, "last_genre": genre, "last_target": target, "last_vocal": vocal, "last_source_language": source_language, "last_target_language": target_language, "last_market_language": market_language, "last_bass": bass, "last_mood": mood, "last_bpm": bpm, "last_extra": extra_style, "last_batch_count": batch_count, "last_batch_strategy": batch_strategy, "last_advisor_mode": advisor_mode, "last_produksi_mode": produksi_mode, "last_jumlah_track": jumlah_track, "last_genre_kombinasi": genre_kombinasi, "last_bobot_referensi": bobot_referensi, "last_auto_pilot": auto_pilot_90})
+    config.update({"gemini_api_key": api_key, "model_name": model_name, "last_preset": preset_name, "last_creation_mode": creation_mode, "last_output_mode": output_mode, "last_genre": genre, "last_target": target, "last_vocal": vocal, "last_source_language": source_language, "last_target_language": target_language, "last_market_language": market_language, "last_bass": bass, "last_mood": mood, "last_bpm": bpm, "last_extra": extra_style, "last_batch_count": batch_count, "last_batch_strategy": batch_strategy, "last_advisor_mode": advisor_mode, "last_produksi_mode": produksi_mode, "last_genre_kombinasi": genre_kombinasi, "last_bobot_referensi": bobot_referensi, "last_auto_pilot": auto_pilot_90})
     save_config(config)
     st.success("Settings saved to config.json.")
 
@@ -484,7 +488,7 @@ available_options_text = f"AVAILABLE DROPDOWN OPTIONS IN THIS APP:\nCreation Mod
 teks_genre_fusion = f"{genre}" if genre_kombinasi == "Tidak Ada" else f"Peleburan (Fusion) mulus antara {genre} dan {genre_kombinasi}"
 
 if youtube_link.strip():
-    instruksi_komposisi = f"KOMPOSISI MUSIK (WAJIB IKUTI TAKARAN INI):\n- {bobot_referensi}% Fondasi Utama: Inti sari, tempo, dan 'vibe' dari referensi YouTube.\n- {bobot_genre}% Bumbu Pelengkap: {teks_genre_fusion}.\nCiptakan aransemen di mana referensi YouTube tetap memegang kendali sesuai persentase."
+    instruksi_komposisi = f"KOMPOSISI MUSIK (WAJIB IKUTI TAKARAN INI):\n- {bobot_referensi}% Fondasi Utama: Inti sari, tempo, dan 'vibe' dari referensi YouTube.\n- {100 - bobot_referensi}% Bumbu Pelengkap: {teks_genre_fusion}.\nCiptakan aransemen di mana referensi YouTube tetap memegang kendali sesuai persentase."
 else:
     instruksi_komposisi = f"KOMPOSISI MUSIK:\nFokus 100% pada {teks_genre_fusion}."
 
@@ -495,7 +499,7 @@ else:
 
 if produksi_mode == "Kompilasi (Long Duration)":
     teks_mode_produksi = f"""
-    TARGET PRODUKSI: Buat Master Blueprint untuk VIDEO KOMPILASI YOUTUBE berdurasi panjang ({jumlah_track} Lagu).
+    TARGET PRODUKSI: Buat Master Blueprint untuk VIDEO KOMPILASI YOUTUBE berdurasi panjang ({batch_count} Lagu).
 
     📦 MASTER PACKAGING SEO (Tulis HANYA 1 KALI di bagian atas):
     1. 5 VARIASI JUDUL YOUTUBE SEO (Target: {market_language}, Pasar Global Barat)
@@ -503,7 +507,7 @@ if produksi_mode == "Kompilasi (Long Duration)":
     3. 1 PROMPT THUMBNAIL MASTER
     4. 1 PROMPT BACKGROUND LOOP VISUAL (Estetika pengujian audio/Hi-Fi)
 
-    🎵 TRACKLIST GENERATOR (Buat {jumlah_track} instruksi trek/prompt Suno):
+    🎵 TRACKLIST GENERATOR (Buat {batch_count} instruksi trek/prompt Suno):
     Untuk setiap trek, berikan:
     - JUDUL TREK
     - SUNO STYLE METADATA (code block)
@@ -511,6 +515,7 @@ if produksi_mode == "Kompilasi (Long Duration)":
     
     🎤 ROTASI VOKAL DINAMIS (MUTLAK): Kamu WAJIB merotasi/mengubah jenis dan nada vokal secara drastis untuk setiap trek (contoh: Deep Male, Ethereal Female, Robotic/Vocoder, dll) agar audiens dapat menguji rentang frekuensi speaker mereka tanpa bosan!
     """
+    instruksi_batch_final = f"BATCH ENGINE: Generate exactly 1 compilation blueprint containing {batch_count} tracks. Apply the creative strategy: {batch_strategy} across the tracks."
 else:
     teks_mode_produksi = f"""
     TARGET PRODUKSI: Buat Master Blueprint untuk 1 SINGLE TRACK.
@@ -524,6 +529,7 @@ else:
     7. BACKGROUND IMAGE PROMPT & THUMBNAIL PROMPT
     8. QUALITY CHECK
     """
+    instruksi_batch_final = f"BATCH ENGINE: Generate exactly {batch_count} variations of the single track based on the Batch Strategy: {batch_strategy}."
 
 master_prompt = f"""
 You are a professional AI music prompt engineer, Suno AI specialist, YouTube metadata and transcript analyst for Western/Global markets.
@@ -531,8 +537,6 @@ You are a professional AI music prompt engineer, Suno AI specialist, YouTube met
 PRESET NAME: {preset_name}
 CREATION MODE: {creation_mode}
 OUTPUT MODE: {output_mode}
-BATCH VARIATIONS: {batch_count}
-BATCH STRATEGY: {batch_strategy}
 MAIN SELECTED GENRE: {genre}
 GENRE RULE: {selected_genre_rule}
 TARGET AUDIENCE: {target}
@@ -554,8 +558,7 @@ MANUAL LYRICS: {manual_lyrics[:3000]}
 
 {teks_mode_produksi}
 
-BATCH GENERATE ENGINE:
-Generate exactly {batch_count} variations (or {batch_count} sets of compilations) based on the Batch Strategy: {batch_strategy}.
+{instruksi_batch_final}
 
 LANGUAGE RULES:
 Target Lyrics Language controls the song lyrics. Market Language controls YouTube Titles, Description, and Thumbnail. (Ensure English is used if targeting global/western markets).
