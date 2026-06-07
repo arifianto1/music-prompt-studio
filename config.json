@@ -1,6 +1,9 @@
 {
   "gemini_api_key": "",
-  "model_name": "gemini-3.5-flash",
+  "openai_api_key": "",
+  "model_name": "gemini-2.5-flash",
+  "openai_model_name": "gpt-4o-mini",
+  "ai_provider": "Gemini",
   "last_preset": "Custom Manual",
   "last_creation_mode": "Rewrite / Translate Lyrics from YouTube",
   "last_output_mode": "Full Song",
